@@ -1,0 +1,39 @@
+name: SLA Monitor
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5"
+
+jobs:
+  check-sla:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Flag overdue tickets
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "status: open",
+              per_page: 100
+            });
+            const now = new Date();
+            for (const issue of issues) {
+              const hoursOpen = (now - new Date(issue.created_at)) / 36e5;
+              if (hoursOpen > 4) {
+                const { data: comments } = await github.rest.issues.listComments({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number
+                });
+                if (comments.some(c => c.body.includes("SLA breach"))) continue;
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: "SLA breach - open for " + Math.floor(hoursOpen) + " hours. @mdnawas85-hue please review."
+                });
+              }
+            }
