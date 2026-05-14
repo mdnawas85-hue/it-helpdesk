@@ -1,0 +1,92 @@
+name: IT Support Ticket
+description: Submit an IT helpdesk request
+title: "[TICKET] "
+labels: ["status: open"]
+assignees: []
+
+body:
+  - type: input
+    id: full-name
+    attributes:
+      label: Your Full Name
+      placeholder: Jane Smith
+    validations:
+      required: true
+
+  - type: input
+    id: email
+    attributes:
+      label: Your Email
+      placeholder: jane@company.com
+    validations:
+      required: true
+
+  - type: input
+    id: department
+    attributes:
+      label: Department
+      placeholder: Marketing, Engineering, HR...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Issue Category
+      options:
+        - Hardware (laptop, monitor, printer)
+        - Software (installation, license, crash)
+        - Network (wifi, VPN, internet)
+        - Access (password, permissions, accounts)
+        - Email (Outlook, Gmail, calendar)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this issue?
+      options:
+        - Low - Minor inconvenience, can wait
+        - Medium - Affects work but have workaround
+        - High - Blocking my work
+        - Critical - Full outage / security issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      placeholder: |
+        What happened?
+        When did it start?
+        What have you tried?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce (if applicable)
+      placeholder: |
+        1. Open application
+        2. Click on...
+        3. Error appears
+
+  - type: input
+    id: device
+    attributes:
+      label: Device / Asset Tag
+      placeholder: MacBook Pro 2023 / Asset #1234
+
+  - type: checkboxes
+    id: urgency
+    attributes:
+      label: Impact
+      options:
+        - label: I cannot work at all
+        - label: Multiple people are affected
+        - label: This is a security concern
